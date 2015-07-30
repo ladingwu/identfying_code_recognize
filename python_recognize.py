@@ -11,7 +11,7 @@ list5 = [9,6,6,8,5]
 list6 = [6,7,6,8,6]
 list7 = [2,6,5,5,7]
 list8 = [3,11,6,11,8]
-list9 = [4,8,6,7,9]，
+list9 = [4,8,6,7,9]
 list10 = [4,5,13,2,1]
 #漏网之鱼
 list11 = [1,8,6,6,9]
@@ -38,7 +38,7 @@ def recognize_picture(p,r):
       
     '''
     img=Image.open(p)
-    pix=img.load()
+    #pix=img.load()
     img1=img.convert("L")
     #convert函数的作用：将图片转化为其他种类的色彩模式，如灰度图（将黑白之间分成若干个等级），
     #二值图（非黑即白），相关的模式有‘1，L,P,RGB.....’，这里用到的模式为L 转化为灰度图，
