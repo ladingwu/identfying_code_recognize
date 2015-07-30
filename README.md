@@ -8,4 +8,4 @@
 然后首运行python_getpic.py然运行python_recognize.py
 
 
-我用了一张验证码，识别结果正确率大概在97%左右。
+我的识别结果正确率大概在97%左右。
