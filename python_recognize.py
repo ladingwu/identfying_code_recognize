@@ -1,8 +1,7 @@
 from PIL import Image
-
-
 #竖直模板库
-#前四个为数字的特征向量，最后为该数字
+#前四个为数字的特征向量，最后一个数字为该数字
+#这些模板都是需要事先拿出十几张验证码试探得出的每个数字的特征向量
 list0 = [7,4,4,4,0]
 list1 = [1,4,13,2,1]
 list2 = [5,6,6,7,2]
@@ -12,9 +11,9 @@ list5 = [9,6,6,8,5]
 list6 = [6,7,6,8,6]
 list7 = [2,6,5,5,7]
 list8 = [3,11,6,11,8]
-list9 = [4,8,6,7,9]
+list9 = [4,8,6,7,9]，
 list10 = [4,5,13,2,1]
-
+#漏网之鱼
 list11 = [1,8,6,6,9]
 list12 = [1,9,7,7,8]
 list13 = [1,0,4,13,1]
@@ -30,17 +29,27 @@ def set_table(a):
             table.append(1)
     return table
 def recognize_picture(p,r):
+    '''
+     这个识别函数的过程是：首先对图像进行灰度处理，然后对验证码中每个数字进行切割，如果有四个数字，就切割成四份
+     每一个数字相是由一个像素矩阵组成，然后求取每个数字的像素矩阵的特征值，然后再通过特征向量来匹配验证码。
+
+     我只通过像素矩阵的竖直方向上的几列的特征像素值来判断验证码，正确率达到了97%，
+     其实还可以通过横向的几列像素值的特征值，还有对角线的特征值继续判断，提高正确率。
+      
+    '''
     img=Image.open(p)
     pix=img.load()
     img1=img.convert("L")
+    #convert函数的作用：将图片转化为其他种类的色彩模式，如灰度图（将黑白之间分成若干个等级），
+    #二值图（非黑即白），相关的模式有‘1，L,P,RGB.....’，这里用到的模式为L 转化为灰度图，
     img2=img1.point(set_table(140),'1')
     pix2=img2.load()
     (width,heigh)=img2.size
     x0=[]
     y0=[]
 
-#x表示行，y表示列
-#x0中存储列的位置，y0存储列每个列中像素为0（黑点）的个数
+    #x表示行，y表示列
+    #x0中存储列的位置，y0存储列每个列中像素为0（黑点）的个数
     for x in range(0,width):      
         jd=0
         for y in  range(1,heigh):           
@@ -50,8 +59,6 @@ def recognize_picture(p,r):
         y0.append(jd)
         if jd>0:     
             x0.append(x)
-    #print(y0)
-    #print(x0)
     count=[]
     for i in range(0,len(x0)-1):
         if (i-1)!=-1:
@@ -65,7 +72,6 @@ def recognize_picture(p,r):
         x0.remove(x0[-1]) 
     z=[]
     z.append(x0[0])
-    #k=0
     for j in range(0,len(x0)-1):
         
         if(x0[j+1]-x0[j])>1:
@@ -96,19 +102,19 @@ def recognize_picture(p,r):
         for x3 in range(0,4):
             jd2 = 0
             for y3 in range(1,h3):
-            
+                #分别取0,2,4,6列的像素值作为这个数的特征向量
                 if pix3[int(x3*2),y3] == 0:
                 
                     jd2+=1
             yn.append(jd2)
         #print(yn)
-        
+
+        #开始识别
         for k in [list0,list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14]:
             t=0
             for m in range(0,4):
                 t=t+(yn[m]-k[m])*(yn[m]-k[m])  #消除正负抵消的误差
-
-            if t<2:    #消除有些数字像素点缺漏的问题
+            if t<2:    # 理论上t==0才符合要求,t<2是为了消除有些数字像素点缺漏的问题
                 result=result+str(k[4])
                 break
     global q
@@ -117,16 +123,16 @@ def recognize_picture(p,r):
     else:
         result="unknow"+result
         print('第'+str(r)+'张')
-    #此处需要整改
+    #此处存储路径需要整改
     path='D:/Python34/Tools/hh/'+str(result)+".jpg"
     img.save(path)
 
-q=0
-for i in range(1000):
-    try:
-        #此处路径需要整改
-        p="D:/python34/Tools/pic/"+str(i)+".jpg"
-        recognize_picture(p,i)
-    except:
-        print('something wrong')
-print("识别了"+str(q)+"张验证码",'正确率为'+str(q/1000))
+if __name__=='__main__':
+    q=0
+    for i in range(1000):
+        try:                     #此处路径需要整改
+            p="D:/python34/Tools/pic/"+str(i)+".jpg"
+            recognize_picture(p,i)
+        except:
+            print('something wrong')
+    print("识别了"+str(q)+"张验证码",'正确率为'+str(q/1000))
