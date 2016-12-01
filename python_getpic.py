@@ -3,7 +3,7 @@ import os
 
 #此处路径自己修改， 
 path='D:\code\python_image_learn\identfying_code_recognize\imgs\\'
-num=10
+num=1000
 if os.path.exists(path):  
 
     pass
