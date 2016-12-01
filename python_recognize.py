@@ -1,5 +1,7 @@
 from PIL import Image
-import traceback  
+import traceback
+import python_getpic
+import os
 #竖直模板库
 #前四个为数字的特征向量，最后一个数字为该数字
 #这些模板都是需要事先拿出十几张验证码试探得出的每个数字的特征向量
@@ -125,21 +127,26 @@ def recognize_picture(p,r):
         q+=1
     else:
         result="unknow"+result
-        print('第'+str(r)+'张')
+        print('第'+str(r)+'张未识别')
     
     path=global_path+str(result)+".jpg"
     img.save(path)
-#此处存储路径需要修改成自己定义的目录
-global_path=r"D:/code/python_image_learn/identfying_code_recognize/recognize/"
+global_path=python_getpic.path+r"recognize/"
 
 if __name__=='__main__':
     q=0
-    for i in range(1000):
-        try:                     #此处路径需要整改
-            p=r"D:\code\python_image_learn\identfying_code_recognize\imgs/"+str(i)+".jpg"
+    end=python_getpic.num
+    if os.path.exists(global_path):  
+        pass
+    else:
+        os.makedirs(global_path)
+        
+    for i in range(end):
+        try:                
+            p=python_getpic.path+str(i)+".jpg"
             recognize_picture(p,i)
         except:
             print('something wrong')
             traceback.print_exc()
             break;
-    print("识别了"+str(q)+"张验证码",'正确率为'+str(q/1000))
+    print("识别了"+str(q)+"张验证码",'正确率为'+str((q/end)*100)+"%")
