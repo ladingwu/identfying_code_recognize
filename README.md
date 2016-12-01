@@ -1,11 +1,14 @@
 # -
 一个普通的验证码识别程序
 
-依赖:PIL,requests
+环境：python3
 
-首先应该修改文件中相关的路径名（下载验证码存放路径，和识别后存放路径），因为本人用的是自己电脑的路径。
+依赖:pillow,requests
 
-然后首运行python_getpic.py然运行python_recognize.py
+使用：
+首先应该修改python_getpic.py文件中相关的路径名（下载验证码存放路径），因为本人用的是自己电脑的路径。
+
+运行然运行python_recognize.py
 
 
 我的识别结果正确率大概在97%左右。
